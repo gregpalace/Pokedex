@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Grid,
   Card,
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
   searchIcon: {
     alignSelf: 'flex-end',
-    marginBottom: '8px',
+    marginBottom: '5px',
   },
   searchInput: {
     width: '200px',
@@ -45,7 +45,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Pokedex = () => {
+const Pokedex = (props) => {
+  const classes = useStyles();
+  const { history } = props;
+  const [pokemonData, setPokemonData] = useState({});
+  const [filter, setFilter] = useState('');
+
   useEffect(() => {
     axios
       .get(`https://pokeapi.co/api/v2/pokemon?limit=807`)
@@ -66,6 +71,28 @@ const Pokedex = () => {
       });
   }, []);
 
+  const handleSearchChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const getPokemonCard = (pokemonId) => {
+    const { id, name, sprite } = pokemonData[pokemonId];
+    return (
+      <Grid item xs={4} key={pokemonId}>
+        <Card onClick={() => history.push(`/${id}`)}>
+          <CardMedia
+            className={classes.cardMedia}
+            image={sprite}
+            style={{ width: '130px', height: '130px' }}
+          />
+          <CardContent className={classes.cardContent}>
+            <Typography>{`${id}. ${toFirstCharUppercase(name)}`}</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    );
+  };
+
   return (
     <>
       <AppBar position="static">
@@ -81,8 +108,18 @@ const Pokedex = () => {
           </div>
         </Toolbar>
       </AppBar>
+      {pokemonData ? (
+        <Grid container spacing={2} className={classes.pokedexContainer}>
+          {Object.keys(pokemonData).map(
+            (pokemonId) =>
+              pokemonData[pokemonId].name.includes(filter) &&
+              getPokemonCard(pokemonId)
+          )}
+        </Grid>
+      ) : (
+        <CircularProgress />
+      )}
     </>
   );
 };
-
 export default Pokedex;
