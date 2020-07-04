@@ -109,7 +109,7 @@ const Pokedex = (props) => {
         </Toolbar>
       </AppBar>
       {pokemonData ? (
-        <Grid container spacing={2} className={classes.pokedexContainer}>
+        <Grid container spacing={3} className={classes.pokedexContainer}>
           {Object.keys(pokemonData).map(
             (pokemonId) =>
               pokemonData[pokemonId].name.includes(filter) &&

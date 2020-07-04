@@ -6,7 +6,9 @@ import {
   CircularProgress,
   Button,
   Card,
+  makeStyles,
 } from '@material-ui/core';
+
 import { toFirstCharUppercase } from './constants';
 import axios from 'axios';
 
@@ -38,7 +40,10 @@ const Pokemon = (props) => {
           {`${id}.`} {toFirstCharUppercase(name)}
           <img src={front_default} />
         </Typography>
-        <img style={{ width: '300px', height: '300px' }} src={fullImageUrl} />
+        <img
+          style={{ width: '300px', height: '300px', alignSelf: 'center' }}
+          src={fullImageUrl}
+        />
         <Typography variant="h3">Pokemon Info</Typography>
         <Typography>
           {'Species: '}
@@ -62,7 +67,11 @@ const Pokemon = (props) => {
         {pokemon !== undefined && pokemon && generatePokemonJSX(pokemon)}
         {pokemon === false && <Typography> Pokemon not found</Typography>}
         {pokemon !== undefined && (
-          <Button variant="contained" onClick={() => history.push('/')}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => history.push('/')}
+          >
             back to pokedex
           </Button>
         )}

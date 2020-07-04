@@ -3,8 +3,16 @@ const app = express();
 const path = require('path');
 const PORT = 3000;
 
+// Parse Req Body
+app.use(express.json());
+app.use(express.static);
+app.use(express.urlencoded({ extended: true }));
+
+// Send main app
 app.get('/', (req, res) => {
-  return res.send(200).sendFile('index.html');
+  return res
+    .status(200)
+    .sendFile(path.resolve(__dirname, './client/index.html'));
 });
 
 // Declare our catch-all
@@ -22,8 +30,6 @@ const globalErrorHandler = (err, req, res, next) => {
   let errObject = Object.assign({}, defaultErr, err);
   res.sendStatus(errObject.status).json(errObject.message);
 };
-
-app.use(globalErrorHandler);
 
 app.use(globalErrorHandler);
 
